@@ -19,7 +19,7 @@ python3 skills/blender-dental/pipeline/run_pipeline.py \
 
 ## セットアップ
 
-詳しい手順（環境構築〜実行）は **Note記事** にまとめています 👉 （ここにNote記事URL）
+詳しい手順（環境構築〜実行）は **Note記事** にまとめています 👉 (https://note.com/enote_d/n/nbd2ad48dbd8e?sub_rt=share_pb)
 
 最短手順:
 
