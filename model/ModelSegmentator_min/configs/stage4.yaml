@@ -1,0 +1,8 @@
+# Stage-4 (landmark heatmap) config (placeholder)
+landmark:
+  num_marks: 16
+  sigma: 0.8
+loss:
+  lambda_heat: 1.0
+data:
+  root: data/sample

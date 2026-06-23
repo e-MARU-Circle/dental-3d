@@ -1,0 +1,17 @@
+# 中空オープン模型パイプライン 依存パッケージ
+# pip install -r requirements.txt --break-system-packages（環境により --break-system-packages 不要）
+numpy
+trimesh
+scipy
+shapely
+scikit-image          # ボクセル→marching cubes
+fast-simplification   # メッシュ簡略化
+pymeshfix             # watertight 体積化
+manifold3d            # ブーリアン差分エンジン
+mapbox-earcut         # 多角形三角形分割（口蓋キャップ）
+torch                 # ML推論（CPU可）
+scikit-learn          # ML前処理
+
+# 別途必要（pipではない）:
+#   - Model Segmentator リポジトリ＋学習済み重み（--repo で指定）
+#   - 確認レンダリング時のみ Blender（MCPアドオン）

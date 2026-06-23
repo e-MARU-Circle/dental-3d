@@ -1,0 +1,37 @@
+# Stage-2 (instance embedding) training config (placeholder)
+model:
+  in_channels: 12
+  max_points: 60000
+  emb_dim: 128
+  center_offset:
+    enable: true
+    hidden: 256
+train:
+  batch_size: 8
+  lr: 0.001
+  epochs: 40
+loss:
+  lambda_disc: 0.5
+  delta_v: 0.5
+  delta_d: 1.5
+  center_offset_weight: 0.1
+cluster:
+  method: dbscan
+  eps: 0.7
+  min_samples: 300
+  split_large:
+    enable: false
+    size_threshold: 20000
+    eps_scale: [0.6, 0.45, 0.3]
+    min_samples: [150, 100, 60]
+    max_iter: 2
+data:
+  root: data/sample_npz
+  manifest: data/manifests/case_catalog.csv
+  train_split: train
+  val_split: val
+  num_workers: 0
+
+stage1:
+  ckpt: ckpts/stage1_last.pth
+  thr: 0.5  # synced with scripts/run_stage1_eval.sh default

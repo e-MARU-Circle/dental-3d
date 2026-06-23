@@ -1,0 +1,67 @@
+seed: 42
+
+data:
+  root: data/sample_npz
+  manifest: data/manifest.csv
+  num_workers: 0
+  use_cached: true
+  train_split: train
+  val_split: val
+  test_split: test
+
+model:
+  backbone: pointnet2_pt_hybrid
+  feature_dim: 128
+  max_points: 60000
+  n_pt_blocks: 2
+  pt_k: 16
+  feat:
+    use_xyz: true
+    use_normals: true
+    use_pca: true
+    use_density: true
+    use_normal_var: true
+    k_neighbors: 16
+
+train:
+  batch_size: 1
+  lr: 0.0005
+  weight_decay: 0.0001
+  epochs: 100
+  ema_decay: 0.999
+
+scheduler:
+  type: cosine
+  warmup_epochs: 10
+  min_lr: 0.000005
+
+loss:
+  class_weight_bg: 1.0
+  class_weight_tooth: 2.5
+  lambda_dice: 2.0
+  lambda_boundary: 2.0
+  use_focal: true
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+
+augment:
+  rotate: true
+  rotate_range: 360
+  flip: true
+  mirror: true
+  mirror_prob: 0.5
+  jitter: true
+  jitter_sigma: 0.005
+  jitter_clip: 0.02
+  scale: true
+  scale_range: [0.85, 1.15]
+  shift: true
+  shift_range: 0.05
+  rotate_perturbation: true
+  rotate_sigma: 0.03
+  rotate_clip: 0.09
+  elastic: true
+  elastic_sigma: 0.03
+  elastic_grid: 4
+  dropout: 0.05
+  boundary_oversample: 2.0

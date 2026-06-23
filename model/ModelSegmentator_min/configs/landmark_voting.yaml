@@ -1,0 +1,31 @@
+# Landmark Detection: PointNet2Lite + Offset Voting
+# Per-point offset prediction → inverse-distance-weighted aggregation
+# 6 landmarks per tooth: Mesial, Distal, Cusp, InnerPoint, OuterPoint, FacialPoint
+
+model:
+  backbone: pointnet2_lite
+  feature_dim: 128
+  max_points: 2048
+  num_landmarks: 6
+  head_type: voting
+  head_hidden_voting: 256
+
+train:
+  batch_size: 16
+  lr: 0.001
+  epochs: 200
+  scheduler: cosine
+  lr_min: 0.00001
+  warmup_epochs: 5
+
+loss:
+  type: wing
+  omega: 10.0
+  epsilon: 2.0
+
+augment:
+  mode: default
+
+data:
+  root: data/landmark_patches_dist325
+  num_workers: 0

@@ -1,0 +1,14 @@
+{
+  "name": "dental-3d",
+  "owner": { "name": "Hideaki Ema", "email": "x820inaka@gmail.com" },
+  "plugins": [
+    {
+      "name": "dental-3d",
+      "source": ".",
+      "description": "歯科3D - スキャン(STL)から中空オープン模型を生成するスキル＋学習済みモデル",
+      "version": "1.0.0",
+      "category": "dental",
+      "tags": ["dental", "3d", "stl", "3d-printing", "ai-skill", "japanese"]
+    }
+  ]
+}

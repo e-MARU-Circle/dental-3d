@@ -1,0 +1,76 @@
+# Stage 2: Instance Segmentation with PointNet++ backbone
+# Target: Dice > 0.9 for FDI tooth segmentation
+
+seed: 42
+
+model:
+  backbone: pointnet2_lite
+  feature_dim: 128
+  max_points: 50000
+  emb_dim: 64  # Embedding dimension for clustering
+
+  # Center offset prediction for better clustering
+  center_offset:
+    enable: true
+    hidden: 256
+
+  # Learned clustering head (experimental)
+  learned_cluster:
+    enable: false
+    hidden: 128
+
+train:
+  batch_size: 2
+  lr: 0.0005
+  epochs: 100
+
+# Loss configuration
+loss:
+  # Discriminative loss parameters
+  delta_v: 0.5   # Intra-cluster variance threshold
+  delta_d: 2.0   # Inter-cluster distance threshold
+
+  # Center offset loss weight
+  center_offset_weight: 1.5
+
+  # For learned clustering
+  lambda_offset: 1.0
+  lambda_var: 0.1
+
+# Clustering configuration
+cluster:
+  backend: hdbscan  # Options: dbscan, hdbscan, meanshift
+
+  # DBSCAN parameters
+  eps: 0.7
+  min_samples: 200
+
+  # HDBSCAN parameters
+  min_cluster_size: 150
+
+  # Spatial weighting
+  spatial_weight: 0.4
+
+  # Post-processing
+  refine: true
+  merge_distance: 3.5
+  min_cluster_size: 100
+  max_cluster_size: 8000
+
+  # Large cluster splitting
+  split_large:
+    enable: true
+    size_threshold: 6000
+    eps_scale: [0.5, 0.4, 0.3]
+
+data:
+  root: data/processed
+  manifest: data/manifests/case_catalog_rebalanced.csv
+  train_split: train
+  val_split: val
+  test_split: test
+  num_workers: 0
+  use_cached: true
+  cache_to_npz: false
+  limit_train_files:
+  limit_val_files:

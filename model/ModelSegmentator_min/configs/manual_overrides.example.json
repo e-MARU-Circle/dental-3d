@@ -1,0 +1,14 @@
+{
+  "CASE_ID_lower": {
+    "clusters": {
+      "14": 38,
+      "19": 0
+    }
+  },
+  "CASE_ID_upper": {
+    "clusters": {
+      "7": 16,
+      "12": 0
+    }
+  }
+}

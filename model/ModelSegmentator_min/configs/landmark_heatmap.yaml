@@ -1,0 +1,35 @@
+# Landmark Detection: PointNet2Lite + Heatmap Soft-Argmax
+# Per-point heatmap → softmax over points → weighted avg coords
+# 6 landmarks per tooth: Mesial, Distal, Cusp, InnerPoint, OuterPoint, FacialPoint
+
+model:
+  backbone: pointnet2_lite
+  feature_dim: 128
+  max_points: 2048
+  num_landmarks: 6
+  head_type: heatmap
+  head_hidden_heatmap: 128
+  tau_start: 1.0
+  tau_end: 0.1
+  tau_anneal_epochs: 100
+
+train:
+  batch_size: 16
+  lr: 0.001
+  epochs: 200
+  scheduler: cosine
+  lr_min: 0.00001
+  warmup_epochs: 5
+
+loss:
+  type: wing
+  omega: 10.0
+  epsilon: 2.0
+  entropy_weight: 0.1
+
+augment:
+  mode: default
+
+data:
+  root: data/landmark_patches_dist325
+  num_workers: 0

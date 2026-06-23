@@ -1,0 +1,7 @@
+{
+  "name": "dental-3d",
+  "version": "1.0.0",
+  "description": "歯科3D - 口腔内スキャン(STL)から3Dプリント用の中空オープン模型を生成するスキル（学習済みモデル同梱）",
+  "author": { "name": "Hideaki Ema", "email": "x820inaka@gmail.com" },
+  "skills": ["./skills/"]
+}

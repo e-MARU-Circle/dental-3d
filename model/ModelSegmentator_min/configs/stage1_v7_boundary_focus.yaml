@@ -1,0 +1,69 @@
+# Stage 1 v7: PointNet2-Lite + Boundary Focus
+# Strategy: v2 winning config + boundary_dice + boundary_ohem + grad_clip
+# Baseline to beat: v2 Overall Dice=0.9203, Boundary Dice=0.7461
+
+seed: 42
+
+model:
+  backbone: pointnet2_lite
+  feature_dim: 128
+  max_points: 16000            # v2と同じ。60Kは過剰→batch_size=1を強制されるため
+  feat:
+    knn: 16
+    radius_mm: 1.0
+    add_curvature: true
+    add_normal_var: true
+    add_density: true
+
+train:
+  batch_size: 2                # v2と同じ。2サンプル/stepで勾配の多様性確保
+  lr: 0.0005
+  weight_decay: 0.0001
+  epochs: 150                  # v2と同じ。100→150で後半のcosine decay領域を拡大
+  ema_decay: 0.0               # EMA無効。ColabMonitorがshadow weights未保存のため
+  grad_clip_norm: 1.0          # NEW: gradient clipping for stability
+
+scheduler:
+  type: cosine
+  warmup_epochs: 10
+  min_lr: 0.000005
+
+loss:
+  class_weight_bg: 1.0
+  class_weight_tooth: 2.5
+  lambda_dice: 2.5              # v2と同じ（v6の2.0より高め→Dice直接最適化重視）
+  lambda_boundary: 1.0          # v2の2.0→1.0に下げ（OHEM+BndDiceと役割分担）
+  use_focal: true
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+  use_lovasz: false             # 無効。val スパイクの増幅要因だった
+  # --- v7 新規: Boundary強化 ---
+  use_boundary_dice: true       # boundary領域限定のDice loss
+  lambda_boundary_dice: 1.0
+  use_boundary_ohem: true       # boundary hardest points focused CE
+  lambda_boundary_ohem: 0.5
+  ohem_ratio: 0.5
+
+augment:
+  rotate: true
+  rotate_range: 180             # v2と同じ（v6の360は過剰）
+  flip: true
+  mirror: true
+  mirror_prob: 0.5
+  jitter: true
+  jitter_sigma: 0.003
+  jitter_clip: 0.01
+  scale: true
+  scale_range: [0.9, 1.1]      # v2と同じ（v6の0.85-1.15より控えめ）
+  dropout: 0.02                 # v2と同じ（v6の0.05より控えめ）
+  boundary_oversample: 2.0      # v6から維持（boundary点を重点サンプリング）
+  # elastic, shift, rotate_perturbation → 外す（データ量900に対して過剰）
+
+data:
+  root: data/sample_npz
+  manifest: data/manifest.csv
+  num_workers: 0
+  use_cached: true
+  train_split: train
+  val_split: val
+  test_split: test

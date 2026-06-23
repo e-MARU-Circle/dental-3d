@@ -1,0 +1,58 @@
+# Stage 1: Teeth/Gingiva Segmentation with PointNet++ Lite backbone
+# Memory-efficient version for MPS/limited GPU memory
+
+seed: 42
+
+model:
+  backbone: pointnet2_lite  # Use lightweight backbone
+  feature_dim: 128
+  max_points: 16000  # Reduced for memory efficiency
+  feat:
+    knn: 16
+    radius_mm: 1.0
+    add_curvature: true
+    add_normal_var: true
+    add_density: true
+
+train:
+  batch_size: 1  # Single sample per batch for memory
+  lr: 0.001
+  epochs: 100
+  ckpt_dir: ckpts
+  ema_decay: 0.0  # Disable EMA to save memory
+
+scheduler:
+  type: cosine
+  warmup_epochs: 5
+  min_lr: 0.00001
+
+loss:
+  class_weight_bg: 1.0
+  class_weight_tooth: 2.5
+  lambda_dice: 2.0
+  lambda_boundary: 2.0
+  use_lovasz: false  # Disable to save memory
+  use_focal: true
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+
+augment:
+  rotate: true
+  rotate_range: 180
+  jitter: true
+  jitter_std: 0.003
+  flip: true
+  scale: true
+  scale_range: [0.95, 1.05]
+
+data:
+  root: data/processed
+  manifest: data/manifests/case_catalog_rebalanced.csv
+  train_split: train
+  val_split: val
+  test_split: test
+  num_workers: 0
+  use_cached: true
+  cache_to_npz: false
+  limit_train_files: 50  # Start with 50 samples for faster iteration
+  limit_val_files: 10

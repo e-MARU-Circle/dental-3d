@@ -1,0 +1,2 @@
+# Cases to exclude from inference/training/evaluation
+NQJYZS60_lower

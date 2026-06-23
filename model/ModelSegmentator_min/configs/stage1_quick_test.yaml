@@ -1,0 +1,47 @@
+# Quick test config - just 3 epochs to verify everything works
+
+seed: 42
+
+model:
+  backbone: pointnet2_lite
+  feature_dim: 128
+  max_points: 8000  # Very small for quick test
+  feat:
+    knn: 16
+    radius_mm: 1.0
+    add_curvature: true
+    add_normal_var: true
+    add_density: true
+
+train:
+  batch_size: 1
+  lr: 0.001
+  epochs: 3  # Just 3 epochs for testing
+  ckpt_dir: ckpts
+
+scheduler:
+  type: none
+
+loss:
+  class_weight_bg: 1.0
+  class_weight_tooth: 2.5
+  lambda_dice: 1.0
+  lambda_boundary: 1.0
+  use_lovasz: false
+  use_focal: false
+
+augment:
+  rotate: false
+  jitter: false
+  flip: false
+
+data:
+  root: data/processed
+  manifest: data/manifests/case_catalog_rebalanced.csv
+  train_split: train
+  val_split: val
+  test_split: test
+  num_workers: 0
+  use_cached: true
+  limit_train_files: 5  # Only 5 files for quick test
+  limit_val_files: 2

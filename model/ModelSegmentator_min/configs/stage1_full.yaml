@@ -1,0 +1,36 @@
+seed: 42
+
+model:
+  backbone: pointnet2
+  feature_dim: 128
+  max_points: 30000
+  feat:
+    knn: 16
+    radius_mm: 0.75
+    add_curvature: true
+    add_normal_var: true
+    add_density: true
+
+train:
+  batch_size: 4
+  lr: 0.0005
+  epochs: 80
+  ckpt_dir: ckpts
+
+loss:
+  lambda_boundary: 1.5
+  lambda_dice: 1.0
+  class_weight_bg: 1.0
+  class_weight_tooth: 3.0
+
+data:
+  root: data/processed
+  manifest: data/manifests/case_catalog_rebalanced.csv
+  train_split: train
+  val_split: val
+  test_split: test
+  num_workers: 0
+  use_cached: true
+  cache_to_npz: false
+  limit_train_files:
+  limit_val_files:

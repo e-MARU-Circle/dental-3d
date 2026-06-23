@@ -1,0 +1,27 @@
+model:
+  max_points: 8192
+  feat:
+    knn: 16
+    radius_mm: 0.75
+    add_curvature: true
+    add_normal_var: true
+    add_density: true
+train:
+  batch_size: 4
+  lr: 0.0005
+  epochs: 3
+loss:
+  lambda_boundary: 1.0
+  lambda_dice: 1.0
+  class_weight_bg: 1.0
+  class_weight_tooth: 2.0
+data:
+  root: data/processed
+  manifest: data/manifests/case_catalog.csv
+  train_split: train
+  val_split: val
+  limit_train_files: 128
+  limit_val_files: 64
+  num_workers: 0
+  use_cached: true
+  cache_to_npz: false

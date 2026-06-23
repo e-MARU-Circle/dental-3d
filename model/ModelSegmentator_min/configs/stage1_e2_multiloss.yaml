@@ -1,0 +1,47 @@
+# Stage1 Experiment E2 — Lovász combo (requires loss extension)
+model:
+  in_channels: 12
+  max_points: 40000
+  feat:
+    knn: 32
+    radius_mm: 1.0
+    add_curvature: true
+    add_normal_var: true
+    add_density: true
+
+train:
+  batch_size: 12
+  lr: 0.0004
+  epochs: 60
+  scheduler:
+    type: cosine
+    warmup_epochs: 6
+    min_lr: 5e-5
+  ema_decay: 0.0
+  run_tag: stage1_e2_multiloss
+
+loss:
+  lambda_boundary: 3.0
+  lambda_dice: 1.5
+  class_weight_bg: 1.0
+  class_weight_tooth: 4.0
+  use_lovasz: true
+  lambda_lovasz: 0.5
+
+augment:
+  rotate: true
+  jitter: true
+  flip: true
+  dropout: 0.1
+
+data:
+  root: data/sample_npz
+  num_workers: 0
+  use_cached: true
+  cache_to_npz: false
+  train_split: train
+  val_split: val
+  hardcase_roots:
+    - data/hardcases
+    - data/hardcases_fn
+  manual_override_tags: manual_override_pass1
